@@ -1,0 +1,126 @@
+class Solution {
+    public class Node {
+        int val;
+        int rank;
+        int size;
+        Node parent;
+    }
+
+    HashMap<Integer, Node> map = new HashMap<>();
+
+    public void createSet(int v) {
+        Node nn = new Node();
+        nn.val = v;
+        nn.rank = 0;
+        nn.size = 1;
+        nn.parent = nn;
+        map.put(v, nn);
+    }
+
+    public int find(int v) {
+        Node nn = map.get(v);
+        return find(nn).val;
+    }
+
+    public Node find(Node nn) {
+        if (nn.parent == nn) {
+            return nn;
+        }
+        Node rn = find(nn.parent);
+        nn.parent = rn;
+        return rn;
+    }
+     public void union(int v, int u){
+        Node n1 = map.get(v);
+        Node n2 = map.get(u);
+        Node re1 = find(n1);
+        Node re2 = find(n2);
+        if(re1 == re2){
+            return;
+        }
+        if(re1.rank == re2.rank){
+            re2.parent = re1;
+            re1.rank++;
+        }
+        else if(re1.rank > re2.rank){
+            re2.parent = re1;
+        }
+        else{
+            re1.parent = re2;
+        }
+    }
+    public void unionBySize(int v, int u){
+        Node n1 = map.get(v);
+        Node n2 = map.get(u);
+        Node re1 = find(n1);
+        Node re2 = find(n2);
+        if(re1 == re2){
+            return;
+        }
+        else if(re1.size > re2.size){
+            re2.parent = re1;
+            re1.size+=re2.size;
+        }
+        else{
+            re1.parent = re2;
+            re2.size += re1.size;
+        }
+    }
+    public boolean isvalid(int cr, int cc, int n){
+        return cr >= 0 && cr < n && cc >= 0 && cc < n;
+    }
+    public int largestIsland(int[][] grid) {
+        int n = grid.length;
+        for(int i = 0; i<n*n; i++){
+            createSet(i);
+        }
+        int r[] = {0,-1,0,1};
+        int c[] = {1,0,-1,0};
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                if(grid[i][j] == 0){
+                    continue;
+                }
+                for(int k = 0; k<4; k++){
+                    int cr = i+r[k];
+                    int cc = j+c[k];
+                    if(isvalid(cr,cc,n)){
+                        if(grid[cr][cc] == 1){
+                            int nodeNo = i*n+j;
+                            int cNodeNo = cr*n+cc;
+                            unionBySize(nodeNo,cNodeNo);
+                        }
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                if(grid[i][j] == 1){
+                    continue;
+                }
+                HashSet<Integer> st = new HashSet<>();
+                for(int k = 0; k<4; k++){
+                    int cr = i+r[k];
+                    int cc = j+c[k];
+                    if(isvalid(cr,cc,n)){
+                        if(grid[cr][cc] == 1){
+                            
+                            st.add(find(cr*n+cc));
+                        }
+                    }
+                }
+                int total = 0;
+                for(int el : st){
+                    total+=map.get(el).size;
+                }
+                ans = Math.max(ans,total+1);
+            }
+        }
+        for(int i = 0; i<n*n; i++){
+            ans = Math.max(ans,find(map.get(i)).size);
+        }
+        return ans;
+    }
+}
