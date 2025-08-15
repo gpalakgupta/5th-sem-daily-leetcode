@@ -13,6 +13,8 @@ class Solution {
         int[] vis = new int[n];
         int[] low = new int[n];
         int[] tin = new int[n]; // time of insetion
+        // tin = store the time of insertion during dfs
+        // low = mm of all adjcent nodes apart from & visited nodes
         List<List<Integer>> ans = new ArrayList<>();
         dfs(0, -1, vis, low, tin, map, ans);
         return ans;
