@@ -1,0 +1,43 @@
+class Solution {
+    public class item{
+        int value;
+        int wt;
+        double ratio;
+        public item(int value, int wt){
+            this.value = value;
+            this.wt = wt;
+            ratio = (1.0*value)/wt;
+        }
+    }
+    double fractionalKnapsack(int[] values, int[] weights, int W) {
+        // code here
+        int n = values.length;
+        item[] arr = new item[n];
+        for(int i = 0; i<n; i++){
+            arr[i] = new item(values[i],weights[i]);
+        }
+        
+        Arrays.sort(arr,new Comparator<item>(){
+            @Override
+            public int compare(item o1, item o2){
+                return Double.compare(o2.ratio,o1.ratio);
+            }
+        });
+        
+        double ans = 0;
+        for(item el : arr){
+            if(W == 0){
+                break;
+            }
+            if(W-el.wt >= 0){
+                ans+=el.value;
+                W-=el.wt;
+            }
+            else{
+                ans+=el.ratio*W;
+                W = 0;
+            }
+        }
+        return ans;
+    }
+}
