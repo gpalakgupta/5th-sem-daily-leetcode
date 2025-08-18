@@ -1,0 +1,28 @@
+class Solution {
+    public int jump(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, -1);
+        return helper(0, nums, dp);
+    }
+
+    public int helper(int idx, int[] nums, int[] dp) {
+        if (idx >= nums.length - 1) {
+            return 0;
+        }
+        if (dp[idx] != -1) {
+            return dp[idx];
+        }
+        int c = Integer.MAX_VALUE;
+        for (int i = 1; i <= nums[idx]; i++) {
+            int st = idx + i;
+            if (st < nums.length) {
+                int count =  helper(st, nums, dp);
+                if (count != Integer.MAX_VALUE) {
+                    c = Math.min(count+1, c);
+                }
+            }
+        }
+        return dp[idx] = c;
+    }
+}
