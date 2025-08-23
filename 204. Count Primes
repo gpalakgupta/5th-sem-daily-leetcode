@@ -1,0 +1,17 @@
+class Solution {
+    public int countPrimes(int n) {
+        boolean[] visible = new boolean[n];
+        for(int i = 2 ; i*i < n ; i++){
+            if(visible[i] == false)
+            for(int j = 2 ; j*i < n ; j++){ 
+                visible[j*i] = true;
+            }
+        }
+        int count = 0;
+        for(int i = 2 ; i < visible.length ; i++){
+            if (visible[i] == false)count++;
+        }
+     return count;
+        
+    }
+}
