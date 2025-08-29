@@ -1,0 +1,22 @@
+// User function Template for Java
+
+class Solution {
+    static String preToInfix(String pre_exp) {
+        // code here
+        int n = pre_exp.length();
+        Stack<String> st = new Stack<>();
+        for(int i = n-1; i>=0; i--){
+            char ch = pre_exp.charAt(i);
+            if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')){
+                st.push(ch+"");
+            }
+            else{
+                String ch1 = st.pop();
+                String ch2 = st.pop();
+                String ans = "("+ch1+ch+ch2+")";
+                st.push(ans);
+            }
+        }
+        return st.peek();
+    }
+}
