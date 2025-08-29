@@ -1,0 +1,23 @@
+// User function Template for Java
+
+class Solution {
+    static String postToPre(String post_exp) {
+        // code here
+        int n = post_exp.length();
+        Stack<String> st = new Stack<>();
+        for(int i = 0; i<n; i++){
+            char ch = post_exp.charAt(i);
+            if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')){
+                st.push(ch+"");
+            }
+            else{
+                String ch2 = st.pop();
+                String ch1 = st.pop();
+                String ans = ch+ch1+ch2;
+                st.push(ans);
+            }
+          
+        }
+          return st.peek();
+    }
+}
