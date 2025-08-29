@@ -1,0 +1,21 @@
+// User function Template for Java
+
+class Solution {
+    static String postToInfix(String exp) {
+        // code here
+        Stack<String> st = new Stack<>();
+        for(int i = 0; i<exp.length(); i++){
+            char ch = exp.charAt(i);
+            if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')){
+                st.push(ch+"");
+            }
+            else{
+                String ch2 = st.pop();
+                String ch1 = st.pop();
+                String ans = "("+ch1+ch+ch2+")";
+                st.push(ans);
+            }
+        }
+        return st.peek();
+    }
+}
