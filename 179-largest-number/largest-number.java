@@ -34,8 +34,8 @@ class Solution {
         
     }
     if(c == nums.length){
-         long t = Long.parseLong(ans);
-            return t + "";
+        
+            return "0";
     }
 return ans ;
     }
