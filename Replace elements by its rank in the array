@@ -21,3 +21,46 @@ class Solution {
         return ans;
     }
 }
+
+// User function Template for Java
+
+class Solution {
+    public static class Pair{
+        int first;
+        int second;
+        public Pair(int first, int second){
+            this.first = first;
+            this.second = second;
+        }
+    }
+    static int[] replaceWithRank(int arr[], int N) {
+        // code here
+        int[] ans = new int[N];
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Comparator<Pair>(){
+            @Override
+            public int compare(Pair o1, Pair o2){
+                return o1.first - o2.first;
+            }
+        });
+        for(int i = 0; i<N; i++){
+            pq.add(new Pair(arr[i],i));
+        }
+        int t = 1;
+        int pre = -1;
+        while(!pq.isEmpty()){
+            Pair el = pq.poll();
+            int first = el.first;
+            int idx = el.second;
+            if(arr[idx] == pre){
+                ans[idx] = t-1;
+            }
+            else{
+                ans[idx] = t;
+                pre = first;
+                t++;
+            }
+           
+        }
+        return ans;
+    }
+}
