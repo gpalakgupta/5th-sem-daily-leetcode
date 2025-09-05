@@ -1,0 +1,23 @@
+// User function Template for Java
+
+class Solution {
+    
+    static int[] replaceWithRank(int arr[], int N) {
+        // code here
+        int[] ans = new int[N];
+        int[] ar = arr.clone();
+        Arrays.sort(ar);
+        int i = 1;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int el : ar){
+            if(!map.containsKey(el)) map.put(el,i++);
+        }
+        // System.out.println(map);
+        for(int j = 0; j<N; j++){
+            int el = arr[j];
+            // System.out.println(el);
+            ans[j] = map.get(el);
+        }
+        return ans;
+    }
+}
