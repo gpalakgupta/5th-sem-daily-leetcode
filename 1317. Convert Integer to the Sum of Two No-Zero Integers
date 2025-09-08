@@ -1,0 +1,26 @@
+class Solution {
+    public int[] getNoZeroIntegers(int n) {
+        int[] ans = new int[2];
+        for(int i = 1; i<n; i++){
+            int a = i;
+            int b = n-i;
+            if(isvalid(a) && isvalid(b)){
+                ans[0] = a;
+                ans[1] = b;
+                break;
+            }
+        }
+        return ans;
+    }
+    public boolean isvalid(int a){
+        int c = 0;
+        while(a != 0){
+            int i = a%10;
+            if(i == 0){
+                return false;
+            }
+            a/=10;
+        }
+        return true;
+    }
+}
