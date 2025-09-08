@@ -1,0 +1,37 @@
+class Solution {
+    public class bipartPair{
+        int vtx;
+        int des;
+        public bipartPair(int vtx, int des){
+            this.vtx = vtx;
+            this.des = des;
+        }
+    }
+    public boolean isBipartite(int[][] graph) {
+        HashMap<Integer,Integer> visited = new HashMap<>();
+        Queue<bipartPair> q = new LinkedList<>();
+        for(int src = 0; src<graph.length; src++){
+            if(visited.containsKey(src)){
+                continue;
+            }
+            q.add(new bipartPair(src,0));
+            while(!q.isEmpty()){
+                bipartPair rv = q.poll();
+                if(visited.containsKey(rv.vtx)){
+                    if(visited.get(rv.vtx) != rv.des){
+                        return false;
+                    }
+                    continue;
+                }
+                visited.put(rv.vtx,rv.des);
+                for(int nbrs : graph[rv.vtx]){
+                    if(!visited.containsKey(nbrs)){
+                        q.add(new bipartPair(nbrs,rv.des+1));
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
+
