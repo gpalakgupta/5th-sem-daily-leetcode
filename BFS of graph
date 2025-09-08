@@ -1,0 +1,24 @@
+class Solution {
+    // Function to return Breadth First Search Traversal of given graph.
+    public ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        ArrayList<Integer> ll = new ArrayList<>();
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        HashSet<Integer> visited = new HashSet<>();
+        while(!q.isEmpty()){
+            int rv = q.poll();
+            if(visited.contains(rv)){
+                continue;
+            }
+            visited.add(rv);
+            ll.add(rv);
+            for(int nbrs : adj.get(rv)){
+                if(!visited.contains(nbrs)){
+                    q.add(nbrs);
+                }
+            }
+        }
+        return ll;
+    }
+}
