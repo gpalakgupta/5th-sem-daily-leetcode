@@ -1,0 +1,27 @@
+class Solution {
+    // Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        Stack<Integer> st = new Stack<>();
+        st.push(0);
+        HashSet<Integer> visited = new HashSet<>();
+        
+        while(!st.isEmpty()){
+            int rv = st.pop();
+            if(visited.contains(rv)){
+                continue;
+            }
+            visited.add(rv);
+            ans.add(rv);
+            ArrayList<Integer> ll = new ArrayList<>(adj.get(rv));
+            Collections.reverse(ll);
+            for(int nbrs : ll){
+                if(!visited.contains(nbrs)){
+                    st.push(nbrs);
+                }
+            }
+        }
+        return ans;
+    }
+}
