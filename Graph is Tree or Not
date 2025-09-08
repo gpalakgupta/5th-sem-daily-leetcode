@@ -1,0 +1,47 @@
+// User function Template for Java
+class Solution {
+    public boolean isTree(int n, int m, ArrayList<ArrayList<Integer>> edges) {
+        // code here
+        if(m+1 != n){
+            return false;
+        }
+        
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<n; i++){
+            map.put(i,new ArrayList<>());
+        }
+        
+        for(ArrayList<Integer> el : edges){
+            int  a = el.get(0);
+            int b = el.get(1);
+            map.get(a).add(b);
+            map.get(b).add(a);
+        }
+        return bft(map);
+    }
+    public boolean bft(HashMap<Integer,List<Integer>> map){
+        Queue<Integer> q = new LinkedList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        int c = 0;
+        for(int src : map.keySet()){
+            if(visited.contains(src)){
+                continue;
+            }
+            q.add(src);
+            c++;
+            while(!q.isEmpty()){
+                int rv = q.poll();
+                if(visited.contains(rv)){
+                    return false;
+                }
+                visited.add(rv);
+                for(int nbrs : map.get(rv)){
+                    if(!visited.contains(nbrs)){
+                        q.add(nbrs);
+                    }
+                }
+            }
+        }
+        return c == 1;
+    }
+}
