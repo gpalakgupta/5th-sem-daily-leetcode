@@ -1,0 +1,40 @@
+class Solution {
+    public boolean isCycle(int V, int[][] edges) {
+        // Code here
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int[] arr : edges){
+            int a = arr[0];
+            int b = arr[1];
+            map.get(a).add(b);
+            map.get(b).add(a);
+        }
+        return dfs(map);
+    }
+    public boolean dfs(HashMap<Integer,List<Integer>> map){
+        Queue<Integer> q = new LinkedList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        for(int src : map.keySet()){
+            if(visited.contains(src)){
+                continue;
+            }
+            q.add(src);
+            while(!q.isEmpty()){
+                int rv = q.poll();
+                if(visited.contains(rv)){
+                    return true;
+                }
+                visited.add(rv);
+                for(int nbrs : map.get(rv)){
+                    if(!visited.contains(nbrs)){
+                        q.add(nbrs);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
+
