@@ -1,0 +1,37 @@
+class Solution {
+    public class Pair{
+        int row;
+        int col;
+        public Pair(int row, int col){
+            this.row = row;
+            this.col = col;
+        }
+    }
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int n = image.length;
+        int m = image[0].length;
+        int[][] vis = image;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(sr,sc));
+        bfs(image,vis,color,q,image[sr][sc]);
+        return vis;
+    }
+    public void bfs(int[][] image, int[][] vis, int color, Queue<Pair> q, int ini){
+        int[] r = {0,-1,0,1};
+        int[] c = {-1,0,1,0};
+        while(!q.isEmpty()){
+            Pair rv = q.poll();
+            int R = rv.row;
+            int C = rv.col;
+            vis[R][C] = color;
+            for(int i = 0; i<4; i++){
+                int cr = R+r[i];
+                int cc = C+c[i];
+                if(cr >= 0 && cc >= 0 && cr < image.length && cc < image[0].length && vis[cr][cc] != color && image[cr][cc] == ini){
+                    q.add(new Pair(cr,cc));
+                    
+                }
+            }
+        }
+    }
+}
