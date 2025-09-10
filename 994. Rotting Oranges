@@ -1,0 +1,57 @@
+class Solution {
+    public class Pair{
+        int row;
+        int col;
+        int tm;
+        public Pair(int row, int col, int tm){
+            this.row = row;
+            this.col = col;
+            this.tm = tm;
+        }
+    }
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] vis = new int[n][m];
+        int rottenOrange = 0;
+        Queue<Pair> q = new LinkedList<>();
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                if(grid[i][j] == 2){
+                    q.add(new Pair(i,j,0));
+                    vis[i][j] = 2;
+                }
+                else{
+                    vis[i][j] = 0;
+                }
+                if(grid[i][j] == 1){
+                    rottenOrange++;
+                }
+            }
+        }
+        return dfs(grid,vis,rottenOrange,q);
+    }
+    public int dfs(int[][] grid, int[][] vis, int rottenOrange, Queue<Pair> q){
+        int[] r = {0,-1,0,1};
+        int[] c = {-1,0,1,0};
+        int time = 0;
+        int cnt = 0;
+        while(!q.isEmpty()){
+            Pair rv = q.poll();
+            int r1 = rv.row;
+            int c1 = rv.col;
+            int t = rv.tm;
+            time = Math.max(t,time);
+            for(int i = 0; i<4; i++){
+                int cr = r1+r[i];
+                int cc = c1+c[i];
+                if(cr < grid.length && cr >= 0 && cc >= 0 && cc < grid[0].length && vis[cr][cc] == 0 && grid[cr][cc] == 1){
+                    q.add(new Pair(cr,cc,t+1));
+                    vis[cr][cc] = 2;
+                    cnt++;
+                }
+            }
+        }
+        return cnt == rottenOrange ? time : -1;
+    }
+}
