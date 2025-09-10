@@ -1,0 +1,28 @@
+class Solution {
+    static int knapsack(int W, int val[], int wt[]) {
+        // code here
+        int[][] dp = new int[val.length+1][W+1];
+        for(int[] a: dp){
+            Arrays.fill(a,-1);
+        }
+        return helper(W,val,wt,dp,0);
+    }
+    public static int helper(int w, int[] val, int[] wt, int[][] dp, int i){
+        
+        if(i>=wt.length || i>=val.length){
+            return 0;
+        }
+        if(dp[i][w] != -1){
+            return dp[i][w];
+        }
+        
+        int inc = 0;
+        int exc = 0;
+        if(w-wt[i] >= 0){
+            inc = val[i]+helper(w-wt[i],val,wt,dp,i+1);
+        }
+        exc = helper(w,val,wt,dp,i+1);
+        return dp[i][w] = Math.max(inc,exc);
+        
+    }
+}
