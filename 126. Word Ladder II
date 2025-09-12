@@ -1,0 +1,64 @@
+class Solution {
+    String b;
+    List<List<String>> ans;
+    HashMap<String,Integer> map;
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        b = beginWord;
+        HashSet<String> st = new HashSet<>();
+        Queue<String> q = new LinkedList<>();
+        for(String el : wordList){
+            st.add(el);
+        }
+        st.remove(beginWord);
+        q.add(beginWord);
+        map = new HashMap<>();
+        map.put(beginWord,1);
+        while(!q.isEmpty()){
+            String str = q.poll();
+            int step = map.get(str);
+            if(str.equals(endWord)){
+                continue;
+            }
+            for(int i = 0; i<str.length(); i++){
+                for(char ch = 'a'; ch <='z'; ch++){
+                    char[] arr = str.toCharArray();
+                    arr[i] = ch;
+                    String sb = new String(arr);
+                    if(st.contains(sb)){
+                        map.put(sb,step+1);
+                        st.remove(sb);
+                        q.add(sb);
+                    }
+                }
+            }
+        }
+        ans = new ArrayList<>();
+        if(map.containsKey(endWord) == true){
+            List<String> ll = new ArrayList<>();
+            ll.add(endWord);
+            bfs(ll,endWord);
+        }
+        return ans;
+    }
+    public void bfs(List<String> ll, String endWord){
+        if(endWord.equals(b)){
+            List<String> dup = new ArrayList<>(ll);
+            Collections.reverse(dup);
+            ans.add(dup);
+            return;
+        }
+        int step = map.get(endWord);
+        for(int i = 0; i<endWord.length(); i++){
+            for(char ch = 'a'; ch<='z'; ch++){
+                char[] arr = endWord.toCharArray();
+                arr[i] = ch;
+                String sb = new String(arr);
+                if(map.containsKey(sb) && map.get(sb) == step-1){
+                    ll.add(sb);
+                    bfs(ll,sb);
+                    ll.remove(ll.size()-1);
+                }
+            }
+        }
+    }
+}
