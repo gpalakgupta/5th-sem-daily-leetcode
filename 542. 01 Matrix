@@ -1,0 +1,40 @@
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int[][] vis = new int[n][m];
+        int max = n + m;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 1) {
+                    vis[i][j] = max;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (vis[i][j] != 0) {
+                    if (i > 0) {
+                        vis[i][j] = Math.min(vis[i][j], vis[i - 1][j] + 1);
+                    }
+                    if (j > 0) {
+                        vis[i][j] = Math.min(vis[i][j], vis[i][j - 1] + 1);
+                    }
+                }
+            }
+        }
+        for(int i = n-1; i>=0; i--){
+            for(int j = m-1; j>=0; j--){
+                if(vis[i][j] != 0){
+                    if(i != n-1){
+                        vis[i][j] = Math.min(vis[i][j],vis[i+1][j]+1);
+                    }
+                    if(j != m-1){
+                        vis[i][j] = Math.min(vis[i][j],vis[i][j+1]+1);
+                    }
+                }
+            }
+        }
+        return vis;
+    }
+}
