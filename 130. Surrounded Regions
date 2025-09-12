@@ -1,0 +1,47 @@
+class Solution {
+    public void solve(char[][] board) {
+        int n = board.length;
+        int m = board[0].length;
+        int[][] vis = new int[n][m];
+            for(int i = 0; i<n; i++){
+            if(board[i][0] == 'O'){
+                 bfs(i,0,vis,board);
+            }
+            if(board[i][m-1] == 'O'){
+                 bfs(i,m-1,vis,board);
+            }
+        }
+        for(int i = 0; i<m; i++){
+            if(board[0][i] == 'O'){
+                bfs(0,i,vis,board);
+
+            }
+            if(board[n-1][i] == 'O'){
+                bfs(n-1,i,vis,board);
+
+            }
+        }
+       
+       
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                if(vis[i][j] == 0 && board[i][j] == 'O'){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+      
+    }
+    public void bfs(int row, int col, int[][] vis, char[][] board){
+        int[] r = {0,-1,0,1};
+        int[] c = {-1,0,1,0};
+        vis[row][col] = 1;
+        for(int i =0; i<4; i++){
+            int cr = row+r[i];
+            int cc = col+c[i];
+            if(cr >= 0 && cc >= 0 && cr < vis.length-1 && cc < vis[0].length-1 && vis[cr][cc] != 1 && board[cr][cc] == 'O'){
+                bfs(cr,cc,vis,board);
+            }
+        }
+    }
+}
