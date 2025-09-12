@@ -1,0 +1,45 @@
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] vis = new int[n][m];
+            for(int i = 0; i<n; i++){
+            if(grid[i][0] == 1){
+                 bfs(i,0,vis,grid);
+            }
+            if(grid[i][m-1] == 1){
+                 bfs(i,m-1,vis,grid);
+            }
+        }
+        for(int i = 0; i<m; i++){
+            if(grid[0][i] == 1){
+                bfs(0,i,vis,grid);
+
+            }
+            if(grid[n-1][i] == 1){
+                bfs(n-1,i,vis,grid);
+            }
+        }
+        int cnt = 0;
+         for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                if(vis[i][j] == 0 && grid[i][j] == 1){
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+    public void bfs(int row, int col, int[][] vis, int[][] board){
+        int[] r = {0,-1,0,1};
+        int[] c = {-1,0,1,0};
+        vis[row][col] = 1;
+        for(int i =0; i<4; i++){
+            int cr = row+r[i];
+            int cc = col+c[i];
+            if(cr >= 0 && cc >= 0 && cr < vis.length-1 && cc < vis[0].length-1 && vis[cr][cc] != 1 && board[cr][cc] == 1){
+                bfs(cr,cc,vis,board);
+            }
+     }
+    }
+}
