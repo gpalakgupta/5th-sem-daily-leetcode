@@ -1,0 +1,76 @@
+class Solution {
+    public String findOrder(String[] words) {
+        // code here
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        int n = 26;
+        for(int i = 0; i<n; i++){
+            map.put(i,new ArrayList<>());
+        }
+        boolean[] visited = new boolean[n];
+        for(String str : words){
+            for(char ch : str.toCharArray()){
+                visited[ch-'a'] = true;
+            }
+        }
+        
+        for(int i = 0; i<words.length-1; i++){
+            String s1 = words[i];
+            String s2 = words[i+1];
+            if(s1.startsWith(s2) && s1.length() > s2.length()){
+                return "";
+            }
+            int len = Math.min(s1.length(),s2.length());
+            for(int j = 0; j<len; j++){
+                if(s1.charAt(j) != s2.charAt(j)){
+                    map.get(s1.charAt(j)-'a').add(s2.charAt(j)-'a');
+                    break;
+                }
+            }
+        }
+        
+        List<Integer> lt = toposort(map,visited);
+        if(lt.isEmpty()){
+            return "";
+        }
+        String ans = "";
+        for(int el : lt){
+            ans = ans+(char)(el+(int)'a');
+        }
+        return ans;
+    }
+    public List<Integer> toposort(HashMap<Integer,List<Integer>> map, boolean[] visited){
+        List<Integer> ans = new ArrayList<>();
+        int[] indeg = new int[26];
+        for(int i = 0; i<26; i++){
+            for(int el : map.get(i)){
+                indeg[el]++;
+            }
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i<26; i++){
+            if(indeg[i] == 0 && visited[i]){
+                q.add(i);
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int rv = q.poll();
+            ans.add(rv);
+            for(int nbrs : map.get(rv)){
+                indeg[nbrs]--;
+                if(indeg[nbrs] == 0){
+                    q.add(nbrs);
+                }
+            }
+        }
+      int presentChars = 0;
+        for(boolean b : visited){
+            if(b) presentChars++;
+        }
+        if(presentChars > ans.size()){
+            return new ArrayList<>();
+        }
+        return ans;
+    }
+}
