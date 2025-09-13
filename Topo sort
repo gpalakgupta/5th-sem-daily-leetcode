@@ -1,0 +1,36 @@
+class Solution {
+    public static ArrayList<Integer> topoSort(int V, int[][] edges) {
+        // code here
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int[] arr : edges){
+            int a = arr[0];
+            int b = arr[1];
+            map.get(a).add(b);
+        }
+        
+        Stack<Integer> st = new Stack<>();
+        int[] vis = new int[V];
+        for(int i = 0; i<V; i++){
+            if(vis[i] == 0){
+                dfs(i,st,map,vis);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!st.isEmpty()){
+            ans.add(st.pop());
+        }
+        return ans;
+    }
+    public static void dfs(int node, Stack<Integer> st, HashMap<Integer,List<Integer>> map,  int[] vis){
+        vis[node] = 1;
+        for(int nbrs : map.get(node)){
+            if(vis[nbrs] == 0){
+                dfs(nbrs,st,map,vis);
+            }
+        }
+        st.push(node);
+    }
+}
