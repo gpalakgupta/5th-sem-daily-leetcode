@@ -1,0 +1,37 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<numCourses; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int i = 0; i<prerequisites.length; i++){
+            int a = prerequisites[i][0];
+            int b = prerequisites[i][1];
+            map.get(a).add(b);
+        }
+        int[] degree = new int[numCourses];
+        for(int i = 0; i<numCourses; i++){
+            for(int el : map.get(i)){
+                degree[el]++;
+            }
+        }
+        Queue<Integer> q = new LinkedList<>();
+        int cnt = 0;
+        for(int i = 0; i<numCourses; i++){
+            if(degree[i] == 0){
+                q.add(i);
+            }
+        }
+        while(!q.isEmpty()){
+            int path = q.poll();
+            cnt++;
+            for(int nbrs : map.get(path)){
+                degree[nbrs]--;
+                if(degree[nbrs] == 0){
+                    q.add(nbrs);
+                }
+            }
+        }
+        return cnt == numCourses;
+    }
+}
