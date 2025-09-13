@@ -1,0 +1,40 @@
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        List<Integer> ans = new ArrayList<>();
+        int n = graph.length;
+        int[] indeg = new int[n];
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<n; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<graph[i].length; j++){
+                map.get(graph[i][j]).add(i);
+            }
+        }
+        for(int i = 0; i<n; i++){
+            for(int el : map.get(i)){
+                indeg[el]++;
+            }
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i<n; i++){
+            if(indeg[i] == 0){
+                q.add(i);
+            }
+        }
+
+        while(!q.isEmpty()){
+            int rv = q.poll();
+            ans.add(rv);
+            for(int nbrs : map.get(rv)){
+                indeg[nbrs]--;
+                if(indeg[nbrs] == 0){
+                    q.add(nbrs);
+                }
+            }
+        }
+        Collections.sort(ans);
+        return ans;
+    }
+}
