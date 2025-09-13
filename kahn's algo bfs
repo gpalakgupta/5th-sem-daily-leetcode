@@ -1,0 +1,40 @@
+class Solution {
+    public static ArrayList<Integer> topoSort(int V, int[][] edges) {
+        // code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int[] arr : edges){
+            int a = arr[0];
+            int b = arr[1];
+            map.get(a).add(b);
+        }
+        
+        int[] indeg = new int[V];
+        for(int i = 0; i<V; i++){
+            for(int el : map.get(i)){
+                indeg[el]++;
+            }
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i<V; i++){
+            if(indeg[i] == 0){
+                q.add(i);
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int rv = q.poll();
+            ans.add(rv);
+            for(int nbrs : map.get(rv)){
+                indeg[nbrs]--;
+                if(indeg[nbrs] == 0){
+                    q.add(nbrs);
+                }
+            }
+        }
+        return ans;
+    }
+}
