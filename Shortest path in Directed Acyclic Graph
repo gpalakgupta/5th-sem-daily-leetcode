@@ -1,0 +1,111 @@
+// User function Template for Java
+class Solution {
+    public void toposort(int path, int[] vis, Stack<Integer> st, HashMap<Integer,HashMap<Integer,Integer>> map){
+        vis[path] = 1;
+        for(int nbrs : map.get(path).keySet()){
+            if(vis[nbrs] == 0){
+                toposort(nbrs,vis,st,map);
+            }
+        }
+        st.push(path);
+    }
+    public int[] shortestPath(int V, int E, int[][] edges) {
+        // Code here
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new HashMap<>());
+        }
+        for(int i = 0; i<E; i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int wt = edges[i][2];
+            map.get(a).put(b,wt);
+        }
+        int[] vis = new int[V];
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0; i<V; i++){
+            if(vis[i] == 0){
+                toposort(i,vis,st,map);
+            }
+        }
+        int[] dis = new int[V];
+        for(int i = 0; i<V; i++){
+            dis[i] = (int)1e9;
+        }
+        dis[0] = 0;
+        while(!st.isEmpty()){
+            int node = st.pop();
+            for(int nbrs : map.get(node).keySet()){
+                int wt = map.get(node).get(nbrs);
+                if(dis[node]+wt < dis[nbrs]){
+                    dis[nbrs] = dis[node]+wt;
+                }
+            }
+        }
+        for(int i = 0; i<V; i++){
+            if(dis[i] == (int)1e9){
+                dis[i] = -1;
+            }
+        }
+        return dis;
+    }
+}
+
+
+// User function Template for Java
+class Solution {
+    public class Pair{
+        int vtx;
+        int des;
+        public Pair(int vtx, int des){
+            this.vtx = vtx;
+            this.des = des;
+        }
+    }
+    public int[] shortestPath(int V, int E, int[][] edges) {
+        // Code here
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new HashMap<>());
+        }
+        for(int i = 0; i<edges.length; i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int cost = edges[i][2];
+            map.get(a).put(b,cost);
+        }
+        
+        return dijkstra(V,map);
+    }
+    public int[] dijkstra(int V, HashMap<Integer,HashMap<Integer,Integer>> map){
+        int[] ans = new int[V];
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Comparator<Pair>(){
+            @Override
+            public int compare(Pair o1, Pair o2){
+                return o1.des-o2.des;
+            }
+        });
+        
+        Arrays.fill(ans,-1);
+        pq.add(new Pair(0,0));
+        HashSet<Integer> st = new HashSet<>();
+        while(!pq.isEmpty()){
+            Pair rv = pq.poll();
+            int vtx = rv.vtx;
+            int des = rv.des;
+            if(st.contains(vtx)){
+                continue;
+            }
+            st.add(vtx);
+            ans[vtx] = des;
+            for(int nbrs : map.get(vtx).keySet()){
+                if(!st.contains(nbrs)){
+                    pq.add(new Pair(nbrs,des+map.get(vtx).get(nbrs)));
+                }
+            }
+        }
+       
+        return ans;
+    
+    }
+}
