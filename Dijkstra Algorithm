@@ -1,0 +1,55 @@
+class Solution {
+    public class Pair{
+        int vtx;
+        int des;
+        public Pair(int vtx, int des){
+            this.vtx = vtx;
+            this.des = des;
+        }
+    }
+    
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new HashMap<>());
+        }
+        
+        for(int i = 0; i<edges.length; i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int cost = edges[i][2];
+            map.get(a).put(b,cost);
+        }
+        
+        return helper(V,map,src);
+    }
+    public int[] helper(int V, HashMap<Integer,HashMap<Integer,Integer>> map, int src){
+        int[] ans = new int[V];
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Comparator<Pair>(){
+            @Override
+            public int compare(Pair o1, Pair o2){
+                return o1.des-o2.des;
+            }
+        });
+        
+        pq.add(new Pair(src,0));
+        HashSet<Integer> visited = new HashSet<>();
+        while(!pq.isEmpty()){
+            Pair rv = pq.poll();
+            int vtx = rv.vtx;
+            int des = rv.des;
+            if(visited.contains(vtx)){
+                continue;
+            }
+            visited.add(vtx);
+            ans[vtx] = des;
+            for(int nbrs : map.get(vtx).keySet()){
+                if(!visited.contains(nbrs)){
+                    pq.add(new Pair(nbrs,map.get(vtx).get(nbrs)+des));
+                }
+            }
+        }
+        return ans;
+    }
+}
