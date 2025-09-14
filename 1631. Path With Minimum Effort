@@ -1,0 +1,51 @@
+class Solution {
+    public class tuple{
+        int first;
+        int second;
+        int third;
+        public tuple(int first, int second, int third){
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+    }
+    public int minimumEffortPath(int[][] heights) {
+        int n = heights.length;
+        int m = heights[0].length;
+        PriorityQueue<tuple> pq = new PriorityQueue<>(new Comparator<tuple>(){
+            @Override
+            public int compare(tuple o1, tuple o2){
+                return o1.first - o2.first;
+            }
+        });
+
+        int[][] vis = new int[n][m];
+        for(int[] a : vis){
+            Arrays.fill(a,(int)(1e9));
+        }
+        pq.add(new tuple(0,0,0));
+        int[] R = {0,-1,0,1};
+        int[] C = {-1,0,1,0};
+        while(!pq.isEmpty()){
+            tuple rv = pq.poll();
+            int des = rv.first;
+            int r = rv.second;
+            int c = rv.third;
+            if(r == n-1 && c == m-1){
+                return des;
+            }
+            for(int i = 0; i<4; i++){
+                int cr = r+R[i];
+                int cc = c+C[i];
+                if(cr >= 0 && cr < n && cc >= 0 && cc < m){
+                    int newDis = Math.max(Math.abs(heights[cr][cc] - heights[r][c]),des);
+                    if(newDis < vis[cr][cc]){
+                        pq.add(new tuple(newDis,cr,cc));
+                        vis[cr][cc] = newDis;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
