@@ -1,0 +1,56 @@
+class Solution {
+    public class tuple{
+        int first;
+        int second;
+        int third;
+        public tuple(int first, int second, int third){
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+    }
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<n; i++){
+            map.put(i,new HashMap<>());
+        }
+
+        for(int i = 0; i<flights.length; i++){
+            int a = flights[i][0];
+            int b = flights[i][1];
+            int cost = flights[i][2];
+            map.get(a).put(b,cost);
+        }
+
+        PriorityQueue<tuple> pq = new PriorityQueue<>(new Comparator<tuple>(){
+            @Override
+            public int compare(tuple o1, tuple o2){
+                return o1.third - o2.third;
+            }
+        });
+        int[] dis = new int[n];
+        Arrays.fill(dis,(int)(1e9));
+        dis[src] = 0;
+        pq.add(new tuple(src,0,0));
+        while(!pq.isEmpty()){
+            tuple rv = pq.poll();
+            int node = rv.first;
+            int des = rv.second;
+            int stops = rv.third;
+            if(stops > k){
+                continue;
+            }
+            for(int nbrs : map.get(node).keySet()){
+                int cost = map.get(node).get(nbrs)+des;
+                if(dis[nbrs] >= cost){
+                    dis[nbrs] = cost;
+                    pq.add(new tuple(nbrs,cost,stops+1));
+                }
+            }
+        }
+        if(dis[dst] == (int)(1e9)){
+            return -1;
+        }
+        return dis[dst];
+    }
+}
