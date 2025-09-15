@@ -1,0 +1,63 @@
+class Solution {
+    public class Pair {
+        int first;
+        int second;
+
+        public Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    public int networkDelayTime(int[][] times, int n, int k) {
+        HashMap<Integer, HashMap<Integer, Integer>> map = new HashMap<>();
+        for (int i = 1; i <= n; i++) {
+            map.put(i, new HashMap<>());
+        }
+        for (int i = 0; i < times.length; i++) {
+            int a = times[i][0];
+            int b = times[i][1];
+            int cost = times[i][2];
+            map.get(a).put(b, cost);
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Comparator<Pair>() {
+            @Override
+            public int compare(Pair o1, Pair o2) {
+                return o1.second - o2.second;
+            }
+        });
+
+        int[] des = new int[n + 1];
+        Arrays.fill(des, (int) (1e9));
+        des[k] = 0;
+        HashSet<Integer> visited = new HashSet<>();
+        pq.add(new Pair(k, 0));
+        while (!pq.isEmpty()) {
+            Pair rv = pq.poll();
+            int node = rv.first;
+            int dis = rv.second;
+            if (visited.contains(node)) {
+                continue;
+            }
+
+            for (int nbrs : map.get(node).keySet()) {
+                int cost = map.get(node).get(nbrs) + dis;
+                if (cost <= des[nbrs]) {
+                    des[nbrs] = cost;
+                    pq.add(new Pair(nbrs, cost));
+                    visited.add(node);
+
+                }
+            }
+        }
+        int mx = 0;
+        for (int i = 1; i <= n; i++) {
+            if (des[i] == (int) (1e9)) {
+                return -1;
+            }
+            mx = Math.max(mx, des[i]);
+        }
+        return mx;
+    }
+}
