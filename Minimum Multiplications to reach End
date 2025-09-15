@@ -1,0 +1,41 @@
+// User function Template for Java
+
+class Solution {
+    public class Pair{
+        int first;
+        int second;
+        public Pair(int first, int second){
+            this.first = first;
+            this.second = second;
+        }
+    }
+    int minimumMultiplications(int[] arr, int start, int end) {
+        // Your code here
+        if(start == end){
+            return 0;
+        }
+        Queue<Pair> q = new LinkedList<>();
+        
+        q.add(new Pair(start,0));
+        int[] dist = new int[100000];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        
+        while(!q.isEmpty()){
+            Pair rv = q.poll();
+            int node = rv.first;
+            int steps = rv.second;
+            
+            for(int el : arr){
+                int num = (el*node)%100000;
+                if(dist[num] > steps+1){
+                    dist[num] = steps+1;
+                    if(num == end){
+                        return steps+1;
+                    }
+                    q.add(new Pair(num,steps+1));
+                }
+            }
+        }
+        return -1;
+    }
+}
