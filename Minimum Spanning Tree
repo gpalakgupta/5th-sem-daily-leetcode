@@ -1,0 +1,57 @@
+class Solution {
+    public class primsPair{
+        int vtx;
+        String acq;
+        int des;
+        public primsPair(int vtx, String acq, int des){
+            this.vtx = vtx;
+            this.acq = acq;
+            this.des = des;
+        }
+    }
+    public int spanningTree(int V, int[][] edges) {
+        // code here
+        
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new HashMap<>());
+        }
+        
+        for(int i = 0; i<edges.length; i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int cost = edges[i][2];
+            map.get(a).put(b,cost);
+            map.get(b).put(a,cost);
+        }
+        
+        return prims(map);
+    }
+    
+    public int prims(HashMap<Integer,HashMap<Integer,Integer>> map){
+        PriorityQueue<primsPair> pq = new PriorityQueue<>(new Comparator<primsPair>(){
+            @Override
+            public int compare(primsPair o1, primsPair o2){
+                return o1.des - o2.des;
+            }
+        });
+        
+        int ans = 0;
+        pq.add(new primsPair(0,"",0));
+        HashSet<Integer> st = new HashSet<>();
+        while(!pq.isEmpty()){
+            primsPair rv = pq.poll();
+            if(st.contains(rv.vtx)){
+                continue;
+            }
+            st.add(rv.vtx);
+            ans+=rv.des;
+            for(int nbrs : map.get(rv.vtx).keySet()){
+                if(!st.contains(nbrs)){
+                    pq.add(new primsPair(nbrs,rv.acq+nbrs,map.get(rv.vtx).get(nbrs)));
+                }
+            }
+        }
+        return ans;
+    }
+}
