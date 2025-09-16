@@ -1,0 +1,115 @@
+// User function Template for Java
+class Solution {
+    public static class Node{
+        int val;
+        int rank;
+        Node parent;
+      
+    }
+    
+    static HashMap<Integer,Node> map = new HashMap<>();
+    public static void createSet(int v){
+        Node nn = new Node();
+        nn.val = v;
+        nn.rank = 0;
+        nn.parent = nn;
+        map.put(v,nn);
+    }
+    public static int find(int v){
+        Node nn = map.get(v);
+        return find(nn).val;
+    }
+    
+    public  static Node find(Node nn){
+        if(nn.parent == nn){
+            return nn;
+        }
+        Node rn = find(nn.parent);
+        nn.parent = rn;
+        return rn;
+    }
+    
+    public static void union(int v1, int v2){
+        Node nn1 = map.get(v1);
+        Node nn2 = map.get(v2);
+        Node rn1 = find(nn1);
+        Node rn2 = find(nn2);
+        if(rn1.rank == rn2.rank){
+            rn2.parent = rn1;
+            rn1.rank++;
+        }
+        else if(rn1.rank > rn2.rank){
+            rn2.parent = rn1;
+        }
+        else{
+            rn1.parent = rn2;
+        }
+    }
+    public static class edgePair{
+        int e1;
+        int e2;
+        int cost;
+        public edgePair(int e1, int e2, int cost){
+            this.e1 = e1;
+            this.e2 = e2;
+            this.cost = cost;
+        }
+    }
+    
+    public static List<edgePair> addEdge(HashMap<Integer,HashMap<Integer,Integer>> map){
+        List<edgePair> ll = new ArrayList<>();
+        for(int e1 : map.keySet()){
+            for(int e2 : map.get(e1).keySet()){
+                ll.add(new edgePair(e1,e2,map.get(e1).get(e2)));
+            }
+        }
+        return ll;
+    }
+    static int kruskalsMST(int V, int[][] edges) {
+        // code here
+        
+        HashMap<Integer,HashMap<Integer,Integer>> map = new HashMap<>();
+        for(int i = 0; i<V; i++){
+            map.put(i,new HashMap<>());
+        }
+        
+        for(int i = 0; i<edges.length; i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int cost = edges[i][2];
+            map.get(a).put(b,cost);
+            map.get(b).put(a,cost);
+        }
+        
+        return kruskal(map);
+    }
+    public static int kruskal(HashMap<Integer,HashMap<Integer,Integer>> map){
+         
+        List<edgePair> ll = addEdge(map);
+        Collections.sort(ll,new Comparator<edgePair>(){
+            @Override
+            public int compare(edgePair o1 , edgePair o2){
+                return o1.cost - o2.cost;
+            }
+        });
+        int ans = 0;
+        for(int v : map.keySet()){
+            createSet(v);
+        }
+        
+        for(edgePair e : ll){
+            int e1 = e.e1;
+            int e2 = e.e2;
+            int re1 = find(e1);
+            int re2 = find(e2);
+            if(re1 == re2){
+                
+            }
+            else{
+                union(re1,re2);
+                ans+=e.cost;
+            }
+        }
+        return ans;
+    }
+}
