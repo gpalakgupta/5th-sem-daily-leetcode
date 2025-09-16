@@ -1,0 +1,19 @@
+/*Complete the function below*/
+class GfG {
+    int find(int par[], int x) {
+        // add code here.
+        if(par[x] != x){
+            par[x] = find(par,par[x]);
+        }
+        return par[x];
+    }
+
+    void unionSet(int par[], int x, int z) {
+        // add code here.
+        int e1 =  find(par,x);
+        int e2 = find(par,z);
+        if(e1 != e2){
+            par[e1] = e2;
+        }
+    }
+}
