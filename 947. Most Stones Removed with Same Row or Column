@@ -1,0 +1,62 @@
+class Solution {
+    public class Node{
+        int val;
+        int rank;
+        Node parent;
+    }
+    HashMap<Integer,Node> map = new HashMap<>();
+
+    public void createSet(int v){
+        Node nn = new Node();
+        nn.val = v;
+        nn.rank = 0;
+        nn.parent = nn;
+        map.put(v,nn);
+    }
+    public int find(int v){
+        Node rn = map.get(v);
+        return find(rn).val;
+    }
+    public Node find(Node nn){
+        if(nn.parent == nn){
+            return nn;
+        }
+        Node rn = find(nn.parent);
+        nn.parent = rn;
+        return rn;
+    }
+    public void union(int v1, int v2){
+        Node nn1 = map.get(v1);
+        Node nn2 = map.get(v2);
+        Node rn1 = find(nn1);
+        Node rn2 = find(nn2);
+        if(rn1.rank == rn2.rank){
+            rn2.parent = rn1;
+            rn1.rank++;
+        }
+        else if(rn1.rank > rn2.rank){
+            rn2.parent = rn1;
+        }
+        else{
+            rn1.parent = rn2;
+        }
+    }
+    public int removeStones(int[][] stones) {
+        int n = stones.length;
+        for(int i = 0; i<n; i++){
+            createSet(i);
+        }
+        for(int i = 0; i<n; i++){
+            for(int j = i+1; j<n; j++){
+                if(stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]){
+                    union(i,j);
+                }
+            }
+        }
+        HashSet<Integer> st = new HashSet<>();
+        for(int i = 0; i<n; i++){
+            st.add(find(i));
+        }
+        return n-st.size();
+    }
+}
