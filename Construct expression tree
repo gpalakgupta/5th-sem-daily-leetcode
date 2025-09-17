@@ -1,0 +1,32 @@
+/*
+class Node {
+    char value;
+    Node left, right;
+
+    Node(char c) {
+        value = c;
+        left = right = null;
+    }
+}
+*/
+class Solution {
+    public Node constructTree(String postfix) {
+        // code here
+        Stack<Node> st = new Stack<>();
+        for(int i = 0; i<postfix.length(); i++){
+            char ch = postfix.charAt(i);
+            if(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^'){
+                Node nn = new Node(ch);
+                Node right = st.pop();
+                Node left = st.pop();
+                nn.right = right;
+                nn.left = left;
+                st.push(nn);
+            }
+            else{
+                st.push(new Node(ch));
+            }
+        }
+        return st.peek();
+    }
+}
