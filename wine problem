@@ -1,0 +1,54 @@
+package DP;
+
+import java.util.Arrays;
+
+public class wine_problem {
+    public static void main(String[] args) {
+        int[] wine = {2,3,5,1,4};
+        int[][] dp = new int[wine.length][wine.length];
+        for(int[] arr : dp){
+            Arrays.fill(arr,-1);
+        }
+        System.out.println(maxProfit(wine,0,wine.length-1,1));
+        System.out.println(maxProfitTD(wine,0,wine.length-1,1,dp));
+        System.out.println(maxProfitBU(wine));
+        }
+
+    private static int maxProfit(int[] wine, int i, int j,int year) {
+        if(i>j){
+            return 0;
+        }
+        int a = wine[i]*year+maxProfit(wine,i+1,j,year+1);
+        int b = wine[j]*year+maxProfit(wine,i,j-1,year+1);
+        return Math.max(a,b);
+    }
+    private static int maxProfitTD(int[] wine, int i, int j,int year,int[][] dp) {
+        if(i>j){
+            return 0;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int fs = year*wine[i]+maxProfit(wine,i+1,j,year+1);
+        int ls = year*wine[j] + maxProfit(wine,i,j-1,year+1);
+        return dp[i][j] = Math.max(fs,ls);
+    }
+    private static int maxProfitBU(int[] wine){
+        int[][] dp = new int[wine.length][wine.length];
+        int year = wine.length;
+        for(int i = 0; i<dp.length; i++){
+            dp[i][i] = wine[i]*year;
+        }
+        year--;
+        for(int i = 1; i<dp.length; i++){
+            for(int j = i; j<dp.length; j++){
+                int t = j-i;
+                int fs = year*wine[t]+ dp[t+1][j];
+                int ls = year*wine[j] + dp[t][j-1];
+                 dp[t][j] = Math.max(fs,ls);
+            }
+            year--;
+        }
+        return dp[0][dp.length-1];
+    }
+}
