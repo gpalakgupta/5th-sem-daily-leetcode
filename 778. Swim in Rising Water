@@ -1,0 +1,43 @@
+class Solution {
+    public class tuple{
+        int val;
+        int i;
+        int j;
+        public tuple(int val, int i, int j){
+            this.val = val;
+            this.i = i;
+            this.j = j;
+        }
+    }
+    public int swimInWater(int[][] grid) {
+        PriorityQueue<tuple> pq = new PriorityQueue<>(new Comparator<tuple>(){
+            @Override
+            public int compare(tuple o1, tuple o2){
+                return o1.val-o2.val;
+            }
+        });
+
+        int ans = 0;
+        int n = grid.length;
+        int[] r = {0,-1,0,1};
+        int[] c = {-1,0,1,0};
+        pq.add(new tuple(grid[0][0], 0, 0));
+        boolean[][] vis = new boolean[n][n];
+        while(!pq.isEmpty()){
+            tuple rv = pq.poll();
+            ans = Math.max(ans,rv.val);
+            if(rv.i == n-1 && rv.j == n-1){
+                return ans;
+            }
+            for(int i = 0; i<4; i++){
+                int cr = rv.i+r[i];
+                int cc = rv.j+c[i];
+                if(cr >= 0 && cc >= 0 && cr < n && cc < n && vis[cr][cc] == false){
+                    pq.add(new tuple(grid[cr][cc],cr,cc));
+                    vis[cr][cc] = true;
+                }
+            }
+        }
+        return ans;
+    }
+}
