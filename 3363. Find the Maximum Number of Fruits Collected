@@ -1,0 +1,69 @@
+class Solution {
+    public int first(int i, int n, int[][] fruits){
+        int c  = 0;
+        while(i<n){
+            c+=fruits[i][i];
+            i++;
+        }
+        return c;
+    }
+
+    public int second(int i, int j, int n, int[][] fruits, int[][] dp){
+        if(i >= n || j < 0 || j>=n){
+            return 0;
+        }
+
+        if(i == n-1 && j == n-1){
+            return 0;
+        }
+
+        if(i == j || i > j){
+            return 0;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+
+        int a = fruits[i][j]+second(i+1,j-1,n,fruits,dp);
+        int b = fruits[i][j]+second(i+1,j,n,fruits,dp);
+        int c = fruits[i][j]+second(i+1,j+1,n,fruits,dp);
+
+        return dp[i][j] = Math.max(a,Math.max(b,c));
+    }
+    public int third(int i, int j, int n, int[][] fruits, int[][] dp){
+        if(i<0 || i>=n || j>=n){
+            return 0;
+        }
+
+        if(i == n-1 && j == n-1){
+            return 0;
+        }
+        
+        if(i == j || i<j){
+            return 0;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+
+        int a = fruits[i][j]+third(i-1,j+1,n,fruits,dp);
+        int b = fruits[i][j]+third(i,j+1,n,fruits,dp);
+        int c = fruits[i][j]+third(i+1,j+1,n,fruits,dp);
+        return dp[i][j] = Math.max(a,Math.max(b,c));
+    }
+    public int maxCollectedFruits(int[][] fruits) {
+        int n = fruits.length;
+        int c1 = first(0,n,fruits);
+        int[][] dp1 = new int[n+1][n+1];
+        for(int[] a : dp1){
+            Arrays.fill(a,-1);
+        }
+        int c2 = second(0,n-1,n,fruits,dp1);
+        int[][] dp2 = new int[n+1][n+1];
+        for(int[] a : dp2){
+            Arrays.fill(a,-1);
+        }
+        int c3 = third(n-1,0,n,fruits,dp2);
+        return c1+c2+c3;
+    }
+}
