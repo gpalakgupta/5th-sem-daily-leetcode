@@ -1,0 +1,13 @@
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        int min = 1;
+        for(int el : nums){
+            if(el == min){
+                min++;
+            }
+        }
+        return min;
+    }
+}
