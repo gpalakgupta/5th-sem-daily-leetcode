@@ -1,0 +1,52 @@
+class Solution {
+    public int maxsub(int[] nums){
+        int sum1 = 0;
+        
+        int n = nums.length;
+        int max = Integer.MIN_VALUE;
+        int i = 0;
+        
+        while(i<n){
+            sum1+=nums[i];
+            max = Math.max(max,sum1);
+            if(sum1 < 0){
+                sum1 = 0;
+            }
+            i++;
+        }
+        return max;
+    }
+    public int minsub(int[] nums){
+        int min = Integer.MAX_VALUE;
+        int n = nums.length;
+        int i = 0;
+        int sum1 = 0;
+        while(i<n){
+            sum1+=nums[i];
+            min = Math.min(min,sum1);
+            if(sum1 >= 0){
+                sum1 = 0;
+            }
+            
+            i++;
+        }
+        return min;
+    }
+    public int maxSubarraySumCircular(int[] nums) {
+      
+        int n = nums.length;
+       
+        int i = 0;
+        int total = 0;
+        while(i<n){
+            total += nums[i];
+            i++;
+        }
+        int max = maxsub(nums);
+        int min = minsub(nums);
+        if(max < 0){
+            return max;
+        }
+        return Math.max(max,total-min);
+    }
+}
