@@ -1,54 +1,48 @@
 class Solution {
-     public class Node {
+    public class Node{
         int val;
         int rank;
         Node parent;
     }
-
-    HashMap<Integer, Node> map = new HashMap<>();
-
-    public void createSet(int v) {
+    HashMap<Integer,Node> map = new HashMap<>();
+    public void createSet(int val){
         Node nn = new Node();
-        nn.val = v;
+        nn.val = val;
         nn.rank = 0;
         nn.parent = nn;
-        map.put(v, nn);
+        map.put(val,nn);
     }
-
-    public int find(int v) {
-        Node nn = map.get(v);
+    public int find(int val){
+        Node nn = map.get(val);
         return find(nn).val;
     }
-
-    public Node find(Node nn) {
-        if (nn.parent == nn) {
+    public Node find(Node nn){
+        if(nn.parent == nn){
             return nn;
         }
         Node rn = find(nn.parent);
         nn.parent = rn;
         return rn;
     }
-     public void union(int v, int u){
-        Node n1 = map.get(v);
-        Node n2 = map.get(u);
-        Node re1 = find(n1);
-        Node re2 = find(n2);
-        if(re1 == re2){
-            return;
+    public void union(int v1, int v2){
+        Node n1 = map.get(v1);
+        Node n2 = map.get(v2);
+        Node rn1 = find(n1);
+        Node rn2 = find(n2);
+        if(rn1.rank == rn2.rank){
+            rn1.parent = rn2;
+            rn2.rank++;
         }
-        if(re1.rank == re2.rank){
-            re2.parent = re1;
-            re1.rank++;
-        }
-        else if(re1.rank > re2.rank){
-            re2.parent = re1;
+        else if(rn1.rank < rn2.rank){
+
+            rn2.parent = rn1;
         }
         else{
-            re1.parent = re2;
+            rn1.parent = rn2;
         }
     }
     public boolean isvalid(int cr, int cc, int n, int m){
-        return cr >= 0 && cr < n && cc >= 0 && cc<m;
+        return (cr >= 0 && cc >= 0 && cr < n && cc < m);
     }
     public int numIslands(char[][] grid) {
         int n = grid.length;
@@ -56,24 +50,25 @@ class Solution {
         for(int i = 0; i<n*m; i++){
             createSet(i);
         }
+
         int cnt = 0;
-        for(int r = 0; r<n; r++){
-            for(int c = 0; c<m; c++){
-                if(grid[r][c] == '0'){
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                if(grid[i][j] == '0'){
                     continue;
                 }
                 cnt++;
-                int[] row = {0,1,0,-1};
-                int[] col = {1,0,-1,0};
-                for(int j = 0; j<4; j++){
-                    int cr = r+row[j];
-                    int cc = c+col[j];
+                int[] r = {0,-1,0,1};
+                int[] c = {-1,0,1,0};
+                for(int k = 0; k<3; k++){
+                    int cr = i+r[k];
+                    int cc = j+c[k];
                     if(isvalid(cr,cc,n,m) && grid[cr][cc] == '1'){
-                        int nodeNo = r*m+c;
-                        int cNodeno = cr*m+cc;
-                        if(find(nodeNo) != find(cNodeno)){
+                        int nodeno = i*m+j;
+                        int cnodeno = cr*m+cc;
+                        if(find(nodeno) != find(cnodeno)){
                             cnt--;
-                            union(nodeNo,cNodeno);
+                            union(nodeno,cnodeno);
                         }
                     }
                 }
