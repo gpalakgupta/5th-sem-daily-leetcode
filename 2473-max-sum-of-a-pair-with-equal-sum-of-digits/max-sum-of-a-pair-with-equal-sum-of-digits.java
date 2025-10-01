@@ -21,8 +21,8 @@ class Solution {
         for(int key : map.keySet()){
             if(map.get(key).size() > 1){
                 Collections.sort(map.get(key));
-                Collections.reverse(map.get(key));
-                ans = Math.max(ans,map.get(key).get(0)+map.get(key).get(1));
+                int n = map.get(key).size();
+                ans = Math.max(ans,map.get(key).get(n-1)+map.get(key).get(n-2));
             }
         }
         return ans;
