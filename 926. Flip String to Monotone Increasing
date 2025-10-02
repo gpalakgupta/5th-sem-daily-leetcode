@@ -1,0 +1,43 @@
+class Solution {
+    int n;
+    public int minFlipsMonoIncr(String s) {
+        n = s.length();
+        int[][] dp =new int[n+1][2];
+        for(int[] a : dp){
+            Arrays.fill(a,-1);
+        }
+        return helper(s,0,0,dp);
+    }
+    public int helper(String s, int idx, int prev, int[][] dp){
+        if(idx >= n){
+            return 0;
+        }
+
+        if(dp[idx][prev] != -1){
+            return dp[idx][prev];
+        }
+
+        char ch = s.charAt(idx);
+        int flip = Integer.MAX_VALUE;
+        int noFlip = Integer.MAX_VALUE;
+        if(ch == '0'){
+            if(prev == 0){
+                flip = 1+helper(s,idx+1,1,dp);
+                noFlip = helper(s,idx+1,0,dp);
+            }
+            else{
+                flip = 1+helper(s,idx+1,1,dp);
+            }
+        }
+        else{
+            if(prev == 0){
+                flip = 1+helper(s,idx+1,0,dp);
+                noFlip = helper(s,idx+1,1,dp);
+            }
+            else{
+                noFlip = helper(s,idx+1,1,dp);
+            }
+        }
+        return dp[idx][prev] = Math.min(flip,noFlip);
+    }
+}
