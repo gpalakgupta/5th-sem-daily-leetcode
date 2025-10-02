@@ -17,21 +17,21 @@ class Solution {
     public int helper(String s1, String s2){
         int n = s1.length();
         int[][] dp = new int[n+1][n+1];
-        for(int i = 1; i<=n; i++){
-            for(int j = 1; j<=n; j++){
+        for(int i = n-1; i>=0; i--){
+            for(int j = n-1; j>= 0; j--){
                 int taken = 0;
-                if(s1.charAt(i-1) == s2.charAt(j-1)){
-                    taken = 1+dp[i-1][j-1];
+                if(s1.charAt(i) == s2.charAt(j)){
+                    taken = 1+dp[i+1][j+1];
                 }
                 else{
-                    int a = dp[i-1][j];
-                    int b = dp[i][j-1];
+                    int a = dp[i+1][j];
+                    int b = dp[i][j+1];
                     taken = Math.max(a,b);
                 }
                 dp[i][j] = taken;
             }
         }
-        return dp[n][n];
+        return dp[0][0];
     }
     // public int helper(String s1, String s2, int i, int j, int[][] dp){
     //     if(i >= s1.length() || j >= s2.length()){
