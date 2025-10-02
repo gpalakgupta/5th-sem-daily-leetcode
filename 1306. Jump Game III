@@ -1,0 +1,20 @@
+class Solution {
+    public boolean canReach(int[] arr, int start) {
+        int n = arr.length;
+        boolean[] dp = new boolean[n];
+        return helper(arr,start,dp,n);
+    }
+    public boolean helper(int[] arr, int st, boolean[] dp, int n){
+        if(st >= n || st < 0 || dp[st]){
+            return false;
+        }
+        if(arr[st] == 0){
+            return true;
+        }
+        
+        dp[st] = true;
+        boolean a = helper(arr,st+arr[st],dp,n);
+        boolean b = helper(arr,st-arr[st],dp,n);
+        return  a || b;
+    }
+}
