@@ -8,7 +8,6 @@ class Solution {
         if(s1.equals(s2)){
             return true;
         }
-
         if(s1.length() != s2.length()){
             return false;
         }
@@ -24,19 +23,18 @@ class Solution {
             map.put(key,false);
             return false;
         }
-        boolean result = false;
+
+        boolean res = false;
         int n = s1.length();
-        for(int i = 1; i<s1.length(); i++){
-
+        for(int i = 1; i<n; i++){
             boolean swap = helper(s1.substring(0,i),s2.substring(n-i)) && helper(s1.substring(i),s2.substring(0,n-i));
-
             boolean noswap = helper(s1.substring(0,i),s2.substring(0,i)) && helper(s1.substring(i),s2.substring(i));
-            if(swap || noswap){
-                result = true;
+            res = swap || noswap;
+            if(res){
                 break;
             }
         }
-        map.put(key,result);
-        return result;
+        map.put(key,res);
+        return res;
     }
 }
