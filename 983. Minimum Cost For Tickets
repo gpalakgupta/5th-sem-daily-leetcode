@@ -1,0 +1,31 @@
+class Solution {
+    public int mincostTickets(int[] days, int[] costs) {
+        int[] dp = new int[365];
+        Arrays.fill(dp,-1);
+        return helper(days,costs,0,dp);
+    }
+    public int helper(int[] days, int[] costs, int idx, int[] dp){
+        if(idx >= days.length){
+            return 0;
+        }
+        if(dp[idx] != -1){
+            return dp[idx];
+        }
+        int day_1 = costs[0]+helper(days,costs,idx+1,dp);
+        int el = days[idx];
+        int i = idx;
+        int mx = days[i]+7;
+        while(i < days.length && days[i] < mx){
+            i++;
+        }
+        int day_7 = costs[1] +helper(days,costs,i,dp);
+
+        i = idx;
+        mx = days[i]+30;
+        while(i < days.length && days[i] < mx){
+            i++;
+        }
+        int day_30 = costs[2] +helper(days,costs,i,dp);
+        return dp[idx] = Math.min(day_1,Math.min(day_7,day_30));
+    }
+}
