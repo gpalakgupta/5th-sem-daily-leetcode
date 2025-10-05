@@ -1,7 +1,6 @@
 class Solution {
     HashMap<String,Integer> map = new HashMap<>();
     public int maxValueOfCoins(List<List<Integer>> piles, int k) {
-        int n = piles.size();
         map.clear();
         return helper(piles,0,k);
     }
@@ -9,19 +8,23 @@ class Solution {
         if(idx >= piles.size()){
             return 0;
         }
-        int taken = 0;
+        if(k <= 0){
+            return 0;
+        }
+
         String key = idx+"-"+k;
         if(map.containsKey(key)){
             return map.get(key);
         }
-        int notaken = helper(piles,idx+1,k);
+
+        int notake = helper(piles,idx+1,k);
+        int take = 0;
         int sum = 0;
-        for(int j = 0; j<Math.min(piles.get(idx).size(),k); j++){
-            sum += piles.get(idx).get(j);
-            taken = Math.max(taken,sum + helper(piles,idx+1,k-(j+1)));
+        for(int i = 0; i<Math.min(piles.get(idx).size(),k); i++){
+            sum += piles.get(idx).get(i);
+            take = Math.max(take,sum+helper(piles,idx+1,k-(i+1)));
         }
-        int res =  Math.max(taken,notaken);
-        map.put(key,res);
-        return res;
+        map.put(key,Math.max(take,notake));
+        return Math.max(take,notake);
     }
 }
