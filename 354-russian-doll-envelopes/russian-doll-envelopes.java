@@ -13,57 +13,40 @@ class Solution {
         for(int i = 0; i<n; i++){
             arr[i] = new Pair(envelopes[i][0],envelopes[i][1]);
         }
-        Arrays.sort(arr,new Comparator<Pair>(){
+        Arrays.sort(arr, new Comparator<Pair>(){
             @Override
             public int compare(Pair o1, Pair o2){
                 if(o1.w == o2.w){
-                    return o2.h - o1.h;
+                    return o2.h-o1.h;
                 }
-                return o1.w - o2.w;
+                return o1.w-o2.w;
             }
         });
-        return helper(arr);
 
-        // int[] dp =  new int[n];
-        // int max = 0;
-        // for(int i = 0; i<n; i++){
-        //     int mx = 0;
-        //     for(int j = 0; j<i; j++){
-        //         if(arr[j].h < arr[i].h ){
-        //             if(dp[j] > mx){
-        //                 mx = dp[j];
-        //             }
-        //         }
-        //     }
-        //     dp[i] = mx+1;
-        //     if(dp[i] > max){
-        //         max = dp[i];
-        //     }
-        // }
-        // return max;
+        return helper(arr,n);
     }
-    public int helper(Pair[] nums){
-        Pair[] dp = new Pair[nums.length];
-        dp[0] = new Pair(nums[0].h,nums[0].w);
+    public int helper(Pair[] arr, int n){
+        Pair[] dp = new Pair[n];
+        dp[0] = new Pair(arr[0].h,arr[0].w);
         int len = 1;
-        for(int i =1; i<nums.length; i++){
-            if(nums[i].h > dp[len-1].h ){
-                dp[len] = new Pair(nums[i].h,nums[i].w);
+        for(int i = 1; i<n; i++){
+            if(dp[len-1].h < arr[i].h){
+                dp[len] = new Pair(arr[i].h,arr[i].w);
                 len++;
             }
             else{
-                int idx = search(dp,0,len,nums[i]);
-                dp[idx] = new Pair(nums[i].h,nums[i].w);
-                
+                int idx = search(arr[i].h,dp,0,len);
+                dp[idx] = new Pair(arr[i].h,arr[i].w);
             }
         }
         return len;
     }
-    public int search(Pair[] dp, int st, int end, Pair item){
-        int ans = 0;
-        while(st<=end){
+
+    public int search(int el , Pair[] dp, int st, int end){
+        int ans = -1;
+        while(st <= end){
             int mid = st+(end-st)/2;
-            if(dp[mid].h >= item.h  ){
+            if(dp[mid].h >= el){
                 ans = mid;
                 end = mid-1;
             }
