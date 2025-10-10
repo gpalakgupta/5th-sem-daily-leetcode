@@ -1,30 +1,32 @@
 class Solution {
+    int n;
     public int maxProfit(int[] prices, int fee) {
-        int n = prices.length;
+        n = prices.length;
         int[][] dp = new int[n+1][2];
         for(int[] a : dp){
             Arrays.fill(a,-1);
         }
-        return helper(0,1,n,prices,fee,dp);
+        return helper(prices,fee,0,0,dp);
     }
-    public int helper(int idx, int buy, int n, int[] prices, int fee, int[][] dp){
-        if(idx == n){
+    public int helper(int[] prices, int fee, int idx, int by, int[][] dp){
+        if(idx >= n){
             return 0;
         }
-        if(dp[idx][buy] != -1){
-            return dp[idx][buy];
+        if(dp[idx][by] != -1){
+            return dp[idx][by];
         }
-        int profit = 0;
-        if(buy == 1){
-            int take = -prices[idx]-fee+helper(idx+1,0,n,prices,fee,dp);
-            int notake = helper(idx+1,1,n,prices,fee,dp);
-            profit = Math.max(take,notake);
+        int buy = 0;
+        int sell = 0;
+        if(by == 0){
+            int take  = -prices[idx]-fee+helper(prices,fee,idx+1,1,dp);
+            int notake = helper(prices,fee,idx+1,0,dp);
+            buy = Math.max(take,notake);
         }
         else{
-            int sell = prices[idx]+helper(idx+1,1,n,prices,fee,dp);
-            int nosell = helper(idx+1,0,n,prices,fee,dp);
-            profit = Math.max(sell,nosell);
+            int take = prices[idx]+helper(prices,fee,idx+1,0,dp);
+            int notake = helper(prices,fee,idx+1,1,dp);
+            sell = Math.max(take,notake);
         }
-        return dp[idx][buy] = profit;
+        return dp[idx][by] = Math.max(buy,sell);
     }
 }
