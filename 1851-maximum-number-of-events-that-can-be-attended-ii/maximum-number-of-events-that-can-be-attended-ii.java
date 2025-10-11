@@ -11,6 +11,8 @@ class Solution {
         }
     }
 
+    HashMap<String, Integer> map = new HashMap<>();
+
     public int maxValue(int[][] events, int k) {
         int n = events.length;
         tuple[] arr = new tuple[n];
@@ -24,28 +26,28 @@ class Solution {
             }
         });
 
-        int[][] dp = new int[n][k + 1];
-        for (int[] a : dp) {
-            Arrays.fill(a, -1);
-        }
-        return helper(arr, 0, k, dp);
+        map.clear();
+        return helper(arr, 0, k);
     }
 
-    public int helper(tuple[] arr, int idx, int k, int[][] dp) {
+    public int helper(tuple[] arr, int idx, int k) {
         if (idx >= arr.length) {
             return 0;
         }
         if (k == 0) {
             return 0;
         }
-        if (dp[idx][k] != -1) {
-            return dp[idx][k];
+        String key = idx + "-" + k;
+        if (map.containsKey(key)) {
+            return map.get(key);
         }
 
-        int notake = helper(arr, idx + 1, k, dp);
+        int notake = helper(arr, idx + 1, k);
         int next = nextidx(arr[idx].second, arr, idx + 1);
-        int take = arr[idx].val + helper(arr, next, k - 1, dp);
-        return dp[idx][k] = Math.max(take, notake);
+        int take = arr[idx].val + helper(arr, next, k - 1);
+        int ans = Math.max(take, notake);
+        map.put(key, ans);
+        return ans;
     }
 
     public int nextidx(int end, tuple[] arr, int idx) {
