@@ -1,40 +1,36 @@
 class Solution {
-    int mod = 1000000007;
     int N;
     int Goal;
     int K;
+    int mod = 1000000007;
     public int numMusicPlaylists(int n, int goal, int k) {
         N = n;
         Goal = goal;
         K = k;
-        long[][] dp = new long[goal+1][n+1];
+        long[][] dp = new long[101][101];
         for(long[] a : dp){
             Arrays.fill(a,-1);
         }
         return (int)helper(0,0,dp);
     }
-    public long helper(int count_unique, int count_song, long[][] dp){
-        if(count_song == Goal){
-            if(count_unique == N){
+    public long helper(int uni, int cnt, long[][] dp){
+        if(cnt == Goal){
+            if(uni == N){
                 return 1;
             }
             return 0;
         }
-        if(dp[count_song][count_unique] != -1){
-            return dp[count_song][count_unique];
+        if(dp[uni][cnt] != -1){
+            return dp[uni][cnt];
         }
 
-        long result = 0;
-
-        if(count_unique < N){
-            result += (N-count_unique) *  helper(count_unique+1,count_song+1,dp);
+        long res = 0;
+        if(uni <  N){
+            res += (N-uni) * helper(uni+1,cnt+1,dp);
         }
-
-        if(count_song > K ){
-            result += (count_unique - K) * helper(count_unique,count_song+1,dp);
+        if(K < uni){
+            res += (uni-K) * helper(uni,cnt+1,dp);
         }
-
-        return dp[count_song][count_unique] = result %mod;
-
+        return dp[uni][cnt] =  res%mod;
     }
 }
