@@ -53,10 +53,18 @@ class Solution {
             i++;
         }
 
-        // return BigInteger.valueOf(2)
-        //         .modPow(BigInteger.valueOf(c - 1), BigInteger.valueOf(mod))
-        //         .intValue();
-
-        return BigInteger.valueOf(2).modPow(BigInteger.valueOf(c-1),BigInteger.valueOf(mod)).intValue();
+       return helper(c-1,2);
+    }
+    public int helper(int n, int c){
+        if(n == 0){
+            return 1;
+        }
+        int p = (n-1+1)/2;
+        int q = (n-1)/2;
+        long ans1 = helper(p,2)%mod;
+        long ans2 = helper(q,2)%mod;
+        long f = (ans1*2)%mod;
+        f = (f*ans2)%mod;
+        return (int) f;
     }
 }
