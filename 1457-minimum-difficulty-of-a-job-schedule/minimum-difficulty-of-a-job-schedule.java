@@ -1,20 +1,21 @@
 class Solution {
+    int n;
     public int minDifficulty(int[] jobDifficulty, int d) {
-        int n = jobDifficulty.length;
-        if ( n< d){
+        n = jobDifficulty.length;
+        if(n < d){
             return -1;
         }
-        int[][] dp = new int[n+1][d+1];
+        int[][] dp = new int[n][d+1];
         for(int[] a : dp){
             Arrays.fill(a,-1);
         }
-        return helper(jobDifficulty,n,0,d,dp);
+        return helper(jobDifficulty,0,d,dp);
     }
-    public int helper(int[] jobDifficulty, int n, int idx, int d, int[][] dp){
+    public int helper(int[] arr, int idx, int d, int[][] dp){
         if(d == 1){
-            int mx = jobDifficulty[idx];
+            int mx = Integer.MIN_VALUE;
             for(int i = idx; i<n; i++){
-                mx = Math.max(mx,jobDifficulty[i]);
+                mx = Math.max(mx,arr[i]);
             }
             return mx;
         }
@@ -22,12 +23,12 @@ class Solution {
             return dp[idx][d];
         }
 
+        int mx = Integer.MIN_VALUE;
         int result = Integer.MAX_VALUE;
-        int mxd = jobDifficulty[idx];
         for(int i = idx; i<=n-d; i++){
-            mxd = Math.max(mxd,jobDifficulty[i]);
-            int res= mxd + helper(jobDifficulty,n,i+1,d-1,dp);
-            result = Math.min(result,res);
+            mx = Math.max(mx,arr[i]);
+            int res = mx+helper(arr,i+1,d-1,dp);
+            result = Math.min(res,result);
         }
         return dp[idx][d] = result;
     }
