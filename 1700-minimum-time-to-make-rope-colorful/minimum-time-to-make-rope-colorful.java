@@ -1,17 +1,20 @@
+import java.util.Arrays;
+
 class Solution {
     int n;
-    
+    int[][] dp;
+
     public int minCost(String colors, int[] neededTime) {
         n = colors.length();
-        
+        dp = new int[n][27];
+        for (int[] a : dp) Arrays.fill(a, -1);
         return helper(colors, neededTime, 0, 26, 0);
     }
 
-    
     public int helper(String colors, int[] need, int idx, int prevColor, int prevTime) {
         if (idx >= n) return 0;
+        if (dp[idx][prevColor] != -1) return dp[idx][prevColor];
 
-         
         int res;
         int currColor = colors.charAt(idx) - 'a';
         int currTime = need[idx];
@@ -25,6 +28,6 @@ class Solution {
             res = helper(colors, need, idx + 1, currColor, currTime);
         }
 
-        return res;
+        return dp[idx][prevColor] = res;
     }
 }
