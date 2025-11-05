@@ -1,23 +1,26 @@
 class Solution {
+    int n;
+    int[] dp;
     public int maxSumAfterPartitioning(int[] arr, int k) {
-        int n = arr.length;
-        int[] dp = new int[n];
+        n = arr.length;
+        dp = new int[n];
         Arrays.fill(dp,-1);
         return helper(arr,k,0,dp);
     }
-    public int helper(int[] arr, int k, int i, int[] dp){
-        if(i >= arr.length){
+    public int helper(int[] arr, int k, int idx, int[] dp){
+        if(idx >= n){
             return 0;
         }
-        if(dp[i] != -1){
-            return dp[i];
+        if(dp[idx] != -1){
+            return dp[idx];
         }
+
         int ans = 0;
-        int mx = -1;
-        for(int j = i; j<arr.length && j-i+1 <= k; j++){
-            mx = Math.max(mx,arr[j]);
-            ans = Math.max(ans,((j-i+1)*mx)+helper(arr,k,j+1,dp));
+        int mx = 0;
+        for(int i = idx; i<n && (i-idx+1 <= k); i++){
+            mx = Math.max(mx,arr[i]);
+            ans = Math.max(ans,((mx*(i-idx+1)) + helper(arr,k,i+1,dp)));
         }
-        return dp[i] = ans;
+        return dp[idx] = ans;
     }
 }
